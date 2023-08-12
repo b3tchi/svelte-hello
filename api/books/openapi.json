@@ -1,0 +1,323 @@
+{
+ "openapi": "3.0.3",
+ "info": {
+  "title": "Books Database",
+  "description": "database to manage books i read",
+  "version": "1.0.0"
+ },
+ "paths": {
+  "/v1/books": {
+   "get": {
+    "tags": [
+     "Books"
+    ],
+    "summary": "List",
+    "operationId": "api/books.List",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "type": "array",
+         "items": {
+          "$ref": "#/components/schemas/DtoBook"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "tags": [
+     "Books"
+    ],
+    "summary": "Create",
+    "operationId": "api/books.Create",
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BooksNewBook"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DtoBook"
+        }
+       }
+      }
+     },
+     "500": {
+      "description": "Internal Server Error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RestErrResponse"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/books/{id}": {
+   "delete": {
+    "tags": [
+     "Books"
+    ],
+    "summary": "Delete",
+    "operationId": "api/books.Delete",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/BooksDeleteConfirm"
+        }
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "tags": [
+     "Books"
+    ],
+    "summary": "Read",
+    "operationId": "api/books.Read",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DtoBook"
+        }
+       }
+      }
+     }
+    }
+   },
+   "put": {
+    "tags": [
+     "Books"
+    ],
+    "summary": "Update",
+    "operationId": "api/books.Update",
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/BooksUpdateBook"
+       }
+      }
+     }
+    },
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/DtoBook"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/v1/healthcheck": {
+   "get": {
+    "tags": [
+     "Health Check"
+    ],
+    "summary": "Healthcheck",
+    "operationId": "app.healthcheck",
+    "responses": {
+     "200": {
+      "description": "OK",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/AppCheckState"
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "components": {
+  "schemas": {
+   "AppCheckState": {
+    "type": "object",
+    "properties": {
+     "db_ping": {
+      "type": "string"
+     },
+     "environment": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string"
+     },
+     "version": {
+      "type": "string"
+     }
+    }
+   },
+   "BooksDeleteConfirm": {
+    "type": "object",
+    "properties": {
+     "message": {
+      "type": "string"
+     }
+    }
+   },
+   "BooksNewBook": {
+    "required": [
+     "title"
+    ],
+    "type": "object",
+    "properties": {
+     "Rating": {
+      "type": "number"
+     },
+     "genres": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "nullable": true
+     },
+     "pages": {
+      "type": "integer"
+     },
+     "published": {
+      "type": "integer"
+     },
+     "title": {
+      "type": "string"
+     }
+    }
+   },
+   "BooksUpdateBook": {
+    "type": "object",
+    "properties": {
+     "Rating": {
+      "type": "number",
+      "nullable": true
+     },
+     "genres": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "nullable": true
+     },
+     "pages": {
+      "type": "integer",
+      "nullable": true
+     },
+     "published": {
+      "type": "integer",
+      "nullable": true
+     },
+     "title": {
+      "type": "string",
+      "nullable": true
+     }
+    }
+   },
+   "DtoBook": {
+    "type": "object",
+    "properties": {
+     "genres": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     },
+     "id": {
+      "type": "integer"
+     },
+     "pages": {
+      "type": "integer"
+     },
+     "published": {
+      "type": "integer"
+     },
+     "rating": {
+      "type": "number"
+     },
+     "title": {
+      "type": "string"
+     }
+    }
+   },
+   "RestErrResponse": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "integer",
+      "description": "Application-specific error code."
+     },
+     "context": {
+      "type": "object",
+      "additionalProperties": {},
+      "description": "Application context."
+     },
+     "error": {
+      "type": "string",
+      "description": "Error message."
+     },
+     "status": {
+      "type": "string",
+      "description": "Status text."
+     }
+    }
+   }
+  }
+ }
+}
